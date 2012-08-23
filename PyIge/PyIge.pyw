@@ -64,6 +64,9 @@ class IgeMainWin(QMainWindow,  IgeMain):
         self.UpdateUi()
 
         self.Game.Changed = False
+        
+        #error_indicator (for spelling)
+        self.ui.Code.indicatorDefine(self.ui.Code.INDIC_CONTAINER+1, self.ui.Code.INDIC_SQUIGGLE, 255)#Qt.red not effect :(
 
     def AddWidgets(self):
         self.ui.SceneCode = IgeEditor(self.ui.SceneSplitter)
@@ -167,7 +170,7 @@ class IgeMainWin(QMainWindow,  IgeMain):
 
             # it's not editor options but it's easier to set them here
             self.ConfirmRemove =  (str(self.Settings.value('editor/confirm_delete', 'true')).lower() == 'true')
-            self.Game.Autocomma = (str(self.Settings.value('editor/autocomma', 'true')).lower() == 'true')
+            self.Game.AutoComma = (str(self.Settings.value('editor/autocomma', 'true')).lower() == 'true')
 
             
         # Show line numbers for code
@@ -761,9 +764,8 @@ class IgeMainWin(QMainWindow,  IgeMain):
             self.CommitCode()
 
             # update code in memory
-            self.Game.Autocomma = (str(self.Settings.value('editor/autocomma', 'true')).lower() == 'true')
             self.Game.UpdateCode()
-
+            self.Game.AutoComma = (str(self.Settings.value('editor/autocomma', 'true')).lower() == 'true')
             # show
             if self.ui.butMainLua.isChecked():
                 self.ui.Code.setText(self.Game.Files['main.lua'])
@@ -836,7 +838,7 @@ class IgeMainWin(QMainWindow,  IgeMain):
             # create project
             self.NewProject(Params)
 
-            self.UpdateUi(False)
+            self.UpdateUi()
         self.Game.Changed = False
 
 
@@ -1045,25 +1047,25 @@ class IgeMainWin(QMainWindow,  IgeMain):
 
     def NextBadWord(self):
         text = self.ui.Code.text()
-        r = re.compile(r".??(?P<word>[а-яА-ЯёЁ]+).??")
+        r = re.compile(r".??(?P<word>[а-яА-ЯёЁa-zA-Z0-9]+).??")#Word with en\ru\num-char
+        r1=re.compile(r"([а-яА-ЯёЁ])") #has ru-char
         matches = r.finditer(text)
         for word in matches:
             myword = word.group('word')
-            if myword not in self.IgnoreList and not self.speller.check(myword)[0]:
-                pos = word.span('word')[0]
+            if r1.search(myword) and myword not in self.IgnoreList and not self.speller.check(myword)[0]:
+                pos = word.start('word')
                 line = text.count('\n', 0, pos)
-                index = pos - text.rfind('\n', 0, pos)
-                bytepos = self.ui.Code.CharPosToByte(text, pos)
+                index = pos - text.rfind('\n', 0, pos)-1
+                bytepos = self.ui.Code.positionFromLineIndex(line,index)
                 start, end = self.ui.Code.getWordBoundaries(line, index, False)
-                len = end - start
-                self.ui.Code.HighliteWord(bytepos, len*2)
-
+                byteposend=self.ui.Code.positionFromLineIndex(line,index+end-start)
+                self.ui.Code.setIndicatorRange(self.ui.Code.INDIC_CONTAINER+1,bytepos,byteposend-bytepos)
                 self.ui.Code.setCursorPosition(line, index)
                 self.ui.Code.ensureLineVisible(line)
-
+                self.ui.Code.selectWord(line, index)
                 self.BadWord = (bytepos, myword)
                 return
-
+                
         QMessageBox.information(self, 'Информация', 'Проверка орфографии закончена')
         self.on_butOrf_clicked()
         self.BadWord = (-1, None)
@@ -1087,8 +1089,8 @@ class IgeMainWin(QMainWindow,  IgeMain):
     def CodeMouseMove(self, event):
         pos = self.ui.Code.positionFromPoint(event.pos())
         if pos > 0:
-            if self.ui.Code.styleAt(pos) == 14:
-                bytepos = self.ui.Code.CharPosToByte(self.ui.Code.text(), pos)
+            if self.ui.Code.hasIndicator(self.ui.Code.INDIC_CONTAINER+1,pos):
+                bytepos = pos 
                 line, index = self.ui.Code.lineIndexFromPosition(pos)
                 word = self.ui.Code.getWord(line, index, 0, False)
                 v = self.speller.check(word)
@@ -1128,7 +1130,7 @@ class IgeMainWin(QMainWindow,  IgeMain):
                     self.ui.SceneCode.ensureLineVisible(delta)
 
                     #line in normal mode. word in spell-checking
-                    if self.ui.Code.styleAt(pos) == 14:
+                    if self.ui.Code.hasIndicator(self.ui.Code.INDIC_CONTAINER+1,pos):
                         self.ui.SceneCode.selectWord(delta, index)
                     else:
                         self.ui.SceneCode.setSelection(delta, 0, delta + 1, 0)
@@ -1158,7 +1160,7 @@ class IgeMainWin(QMainWindow,  IgeMain):
                     Code.ensureLineVisible(delta)
                     
                     #line in normal mode. word in spell-checking
-                    if self.ui.Code.styleAt(pos) == 14:
+                    if self.ui.Code.hasIndicator(self.ui.Code.INDIC_CONTAINER+1,pos):
                         Code.selectWord(delta, index)
                     else:
                         Code.setSelection(delta, 0, delta + 1, 0)
@@ -1176,7 +1178,7 @@ class IgeMainWin(QMainWindow,  IgeMain):
                     self.ui.FuncCode.ensureLineVisible(delta)
 
                     #line in normal mode. word in spell-checking
-                    if self.ui.Code.styleAt(pos) == 14:
+                    if self.ui.Code.hasIndicator(self.ui.Code.INDIC_CONTAINER+1,pos):
                         self.ui.FuncCode.selectWord(delta, index)
                     else:
                         self.ui.FuncCode.setSelection(delta, 0, delta + 1, 0)
