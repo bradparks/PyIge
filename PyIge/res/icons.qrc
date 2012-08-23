@@ -1,0 +1,43 @@
+<RCC>
+  <qresource prefix="MainWindow">
+    <file>icons/32x32/runset.png</file>
+    <file>icons/32x32/editorset.png</file>
+    <file>icons/32x32/otherset.png</file>
+    <file>icons/20x20/dialogs.png</file>
+    <file>icons/20x20/objects.png</file>
+    <file>icons/20x20/rooms.png</file>
+    <file>icons/20x20/functions.png</file>
+    <file>icons/20x20/code.png</file>
+    <file>icons/16x16/add.png</file>
+    <file>icons/16x16/config.png</file>
+    <file>icons/16x16/delete.png</file>
+    <file>icons/16x16/edit.png</file>
+    <file>icons/16x16/export.png</file>
+    <file>icons/16x16/help.png</file>
+    <file>icons/16x16/information.png</file>
+    <file>icons/16x16/newdialog.png</file>
+    <file>icons/16x16/newfunction.png</file>
+    <file>icons/16x16/spellcheck.png</file>
+    <file>icons/16x16/newobject.png</file>
+    <file>icons/16x16/newprj.png</file>
+    <file>icons/16x16/prjsettings.png</file>
+    <file>icons/16x16/run.png</file>
+    <file>icons/16x16/save.png</file>
+    <file>icons/16x16/saveas.png</file>
+    <file>icons/32x32/exit.png</file>
+    <file>icons/32x32/newdialog.png</file>
+    <file>icons/32x32/newfunction.png</file>
+    <file>icons/32x32/newobject.png</file>
+    <file>icons/32x32/newprj.png</file>
+    <file>icons/32x32/newroom.png</file>
+    <file>icons/32x32/open.png</file>
+    <file>icons/32x32/prjsettings.png</file>
+    <file>icons/32x32/run.png</file>
+    <file>icons/32x32/save.png</file>
+    <file>icons/32x32/saveas.png</file>
+    <file>icons/16x16/spellignore.png</file>
+    <file>icons/16x16/roomxroom.png</file>
+    <file>icons/16x16/spelledit.png</file>
+    <file>icons/32x32/settings.png</file>
+  </qresource>
+</RCC>

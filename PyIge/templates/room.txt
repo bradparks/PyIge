@@ -1,0 +1,14 @@
+nam = 'имя',
+dsc = [[описание]],
+
+--pic = '',
+obj = { },
+way = { },
+
+enter = function(s, f)
+	return true
+end,
+
+exit = function(s, t)
+	return true
+end,
