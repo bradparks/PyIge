@@ -1,0 +1,13 @@
+dec 21, 2013
+попытка создания нового проекта выбор через иконку на панели управления "Новый проект"
+вывод в терминал >
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/PyIge/PyIge.pyw", line 841, in on_actionCreateProject_triggered
+    self.UpdateUi()
+  File "/usr/lib/python3/dist-packages/PyIge/PyIge.pyw", line 129, in UpdateUi
+    self.on_Tabs_currentChanged(4)
+  File "/usr/lib/python3/dist-packages/PyIge/PyIge.pyw", line 767, in on_Tabs_currentChanged
+    self.Game.UpdateCode()
+  File "/usr/lib/python3/dist-packages/PyIge/IgeGame.py", line 180, in UpdateCode
+    if self.AutoComma:
+AttributeError: 'IgeGame' object has no attribute 'AutoComma'
