@@ -128,7 +128,11 @@ class IgeMain:
 
     def InitSpell(self):
         try:
-            self.speller = aspell()
+            Spell_program=self.Settings.value("spell/path", "")
+            Spell_options=self.Settings.value("spell/options", None)
+            Spell_coding=self.Settings.value("spell/coding", "utf-8")
+            self.speller = aspell(Spell_program,Spell_options,Spell_coding)
+            self.speller.pipe.stdout.readline() #skip aspell hello line
             path = os.path.join(os.path.expanduser('~'), '.PyIge', 'ignore.txt')
             if not os.path.isfile(path):
                 open(path, 'w', encoding = 'utf-8').close()

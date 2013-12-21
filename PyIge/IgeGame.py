@@ -177,7 +177,7 @@ class IgeGame:
             self.Files['func.lua'] += func + "\n\n"
 
 
-        if self.Autocomma:
+        if self.AutoComma:
             rx = re.compile(r"""
             ^                                       # start of the string
             [ \t]*                                  # tabs and spaces before name
